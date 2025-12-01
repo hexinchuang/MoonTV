@@ -449,7 +449,7 @@ function PlayPageClient() {
 
         // 解析速度值
         const match = speedStr.match(/^([\d.]+)\s*(KB\/s|MB\/s)$/);
-        if (!match) return 30;
+        if (!match) return 0;
 
         const value = parseFloat(match[1]);
         const unit = match[2];
@@ -955,7 +955,9 @@ function PlayPageClient() {
     };
 
     initAll();
-  }, []);
+  }, [
+    /* 依赖数组保持为空，只在挂载时运行一次，避免影响搜索流 */
+  ]);
 
   // 播放记录处理
   useEffect(() => {
@@ -2033,8 +2035,8 @@ function PlayPageClient() {
     blockAdEnabled,
     currentEpisodeIndex,
     detail,
-    // 确保当比例模式变化时，播放器可以根据 ArtPlayer 的配置重新初始化
-    currentAspectMode,
+    // currentAspectMode 已不再是 ArtPlayer 实例创建时的依赖，它只通过 setPlayerAspect 改变 ArtPlayer 属性
+    // 移除了 currentAspectMode 作为直接依赖，以防不必要的 ArtPlayer 销毁和重建
   ]);
 
   // 当组件卸载时清理定时器、Wake Lock 和播放器资源
